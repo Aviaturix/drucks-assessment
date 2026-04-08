@@ -63,12 +63,31 @@ def get_cross_section_segments(triangles, z):
 def estimate_print_time(triangles, z_min, z_max, layer_height=0.2, speed=60):
     total_length = 0.0
     z = z_min + layer_height / 2
+    
+    layer_num = 0
+    # Calculate total layers upfront so we can show X of Y progress
+    total_layers = int((z_max - z_min) / layer_height)
+    
     while z < z_max:
         segments = get_cross_section_segments(triangles, z)
+        
         for a, b in segments:
             total_length += math.dist(a, b)
+        
         z += layer_height
-    return total_length / 60  # seconds to minutes
+        layer_num += 1
+        
+        # Print progress every 50 layers so you can see it's working
+        # Without this the terminal looks frozen even though it's running
+        if layer_num % 50 == 0:
+            print(f"  Layer {layer_num} of {total_layers} done...")
+    
+    # total_length is in mm, speed is in mm/s
+    # dividing by speed gives seconds
+    # dividing by 60 converts seconds to minutes
+    time_seconds = total_length / speed
+    time_minutes = time_seconds / 60
+    return time_minutes
 
 if __name__ == "__main__":
     filename = "DrucksShoe.stl"
@@ -93,5 +112,6 @@ if __name__ == "__main__":
     print(f"Layer count at 0.2mm: {layers}")
 
     print("\n--- Task 3: Print Time ---")
+    print("This will take several minutes - 581 layers x 373,632 triangles each...")
     t = estimate_print_time(triangles, z_min, z_max)
     print(f"Estimated print time: {t:.1f} minutes")

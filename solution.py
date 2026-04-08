@@ -43,3 +43,15 @@ def compute_volume(triangles):
 
 volume = compute_volume(triangles)
 print(f"Total volume: {volume:.2f} mm³")
+
+def compute_bounding_box(triangles):
+    all_verts = [v for tri in triangles for v in tri]
+    xs = [v[0] for v in all_verts]
+    ys = [v[1] for v in all_verts]
+    zs = [v[2] for v in all_verts]
+    return {
+        'x': (min(xs), max(xs)),
+        'y': (min(ys), max(ys)),
+        'z': (min(zs), max(zs))
+        
+    }

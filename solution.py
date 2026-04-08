@@ -55,3 +55,14 @@ def compute_bounding_box(triangles):
         'z': (min(zs), max(zs))
         
     }
+
+
+def compute_layer_count(z_min, z_max, layer_height=0.2):
+    height = z_max - z_min
+    return int(height / layer_height)
+
+bb = compute_bounding_box(triangles)
+z_min, z_max = bb['z']
+layers = compute_layer_count(z_min, z_max)
+print(f"Height: {z_max - z_min:.2f} mm")
+print(f"Layers: {layers}")

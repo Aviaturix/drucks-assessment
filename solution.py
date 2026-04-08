@@ -66,3 +66,26 @@ z_min, z_max = bb['z']
 layers = compute_layer_count(z_min, z_max)
 print(f"Height: {z_max - z_min:.2f} mm")
 print(f"Layers: {layers}")
+
+z_test = (z_min + z_max) / 2  # middle of the shoe
+print(f"Testing at z = {z_test:.2f}")
+
+segments = []
+for v1, v2, v3 in triangles:
+    pts = []
+    for a, b in [(v1,v2), (v2,v3), (v3,v1)]:
+        if (a[2] <= z_test <= b[2]) or (b[2] <= z_test <= a[2]):
+            if abs(b[2] - a[2]) < 1e-9:
+                continue
+            t = (z_test - a[2]) / (b[2] - a[2])
+            x = a[0] + t * (b[0] - a[0])
+            y = a[1] + t * (b[1] - a[1])
+            pts.append((x, y))
+    if len(pts) == 2:
+        segments.append((pts[0], pts[1]))
+
+print(f"Found {len(segments)} segments at z={z_test:.2f}")
+
+import math
+total = sum(math.dist(a, b) for a, b in segments)
+print(f"Total perimeter at this layer: {total:.2f} mm")

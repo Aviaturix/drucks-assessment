@@ -21,3 +21,16 @@ def parse_stl(filename):
 triangles = parse_stl("DrucksShoe.stl")
 print(f"Actually loaded: {len(triangles)} triangles")
 print(f"First triangle looks like: {triangles[0]}")
+
+def signed_tet_volume(v1, v2, v3):
+    x1, y1, z1 = v1
+    x2, y2, z2 = v2
+    x3, y3, z3 = v3
+    return (x1 * (y2 * z3 - y3 * z2)
+          - y1 * (x2 * z3 - x3 * z2)
+          + z1 * (x2 * y3 - x3 * y2)) / 6.0
+
+# Test on first triangle
+v1, v2, v3 = triangles[0]
+vol = signed_tet_volume(v1, v2, v3)
+print(f"Volume of one tetrahedron: {vol}")

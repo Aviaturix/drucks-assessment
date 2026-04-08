@@ -34,3 +34,12 @@ def signed_tet_volume(v1, v2, v3):
 v1, v2, v3 = triangles[0]
 vol = signed_tet_volume(v1, v2, v3)
 print(f"Volume of one tetrahedron: {vol}")
+
+def compute_volume(triangles):
+    total = 0.0
+    for v1, v2, v3 in triangles:
+        total += signed_tet_volume(v1, v2, v3)
+    return abs(total)
+
+volume = compute_volume(triangles)
+print(f"Total volume: {volume:.2f} mm³")
